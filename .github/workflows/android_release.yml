@@ -18,8 +18,10 @@ jobs:
           cache: gradle
 
       - name: Decode Keystore
+        env:
+          ENCODED_STRING: ${{ secrets.KEYSTORE_BASE64 }}
         run: |
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -di > app/release-key.jks
+          echo "$ENCODED_STRING" | base64 -d > app/release-key.jks
 
       - name: Create signing.properties
         run: |
