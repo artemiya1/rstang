@@ -19,9 +19,14 @@ jobs:
 
       - name: Decode Keystore
         env:
-          ENCODED_STRING: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
         run: |
-          echo "$ENCODED_STRING" | base64 -d > app/release-key.jks
+          import os
+          import base64
+          data = os.environ['KEYSTORE_BASE64'].strip()
+          with open("app/release-key.jks", "wb") as f:
+              f.write(base64.b64decode(data))
+        shell: python
 
       - name: Create signing.properties
         run: |
